@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System;
 using ToyRobotConsole.Interfaces;
 using ToyRobotConsole.Robots;
+using ToyRobotConsole.Helper;
 
 namespace ToyRobotConsole.Implementation
 {
@@ -12,11 +13,19 @@ namespace ToyRobotConsole.Implementation
     /// </summary>
     public class Command : ICommand
     {
-        public MovementSimulator Simulation;
-        public Table Table = new Table(5, 5);
+        private MovementSimulator Simulation;
+        private IItem Table;
         public bool Placed;
         public string Message = string.Empty;
-        public string ErrorInputs = "The inputs in the file are not correctly formatted.";
+        public string ErrorInputs = Constants.ErrorMessage;
+
+        public Command(IMovement movement, IItem item)
+        {
+            Simulation = (MovementSimulator)movement;
+            Table = item;
+            Table.Width = Constants.ItemWidth;
+            Table.Length = Constants.ItemLength;
+        }
 
         /// <summary>
         /// Initializes communication
@@ -25,27 +34,34 @@ namespace ToyRobotConsole.Implementation
         /// <returns></returns>
         public string Start(string[] commands)
         {
-            Simulation = new MovementSimulator(Table);
-            foreach (string command in commands)
+            try
             {
-                if (Placed)
+                foreach (string command in commands)
                 {
-                    ProcessCommand(command);
+                    if (Placed)
+                    {
+                        ProcessCommand(command);
+                    }
+                    else if (Regex.IsMatch(command, "[PLACE]"))
+                    {
+                        Placed = true;
+                        ProcessCommand(command);
+                    }
+                    if (Message == ErrorInputs)
+                    {
+                        break;
+                    }
+                    if (Message.Length > 1)
+                    {
+                        Console.WriteLine(Message);
+                        Message = "";
+                    }
                 }
-                else if (Regex.IsMatch(command, "[PLACE]"))
-                {
-                    Placed = true;
-                    ProcessCommand(command);
-                }
-                if (Message == ErrorInputs)
-                {
-                    break;
-                }
-                if (Message.Length > 1)
-                {
-                    Console.WriteLine(Message);
-                    Message = "";
-                }
+                return Message;
+            }
+            catch (Exception ex)
+            {
+                ExceptionHandling.Instance.ThrowException(ex);
             }
             return Message;
         }

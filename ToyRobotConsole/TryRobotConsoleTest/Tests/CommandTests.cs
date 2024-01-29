@@ -1,6 +1,11 @@
 ﻿using AutoMoq;
 using FluentAssertions;
+using Microsoft.VisualStudio.TestPlatform.TestHost;
+using Moq;
+using ToyRobotConsole;
 using ToyRobotConsole.Implementation;
+using ToyRobotConsole.Interfaces;
+using ToyRobotConsole.Robots;
 
 namespace TryRobotConsoleTest.Tests
 {
@@ -10,16 +15,17 @@ namespace TryRobotConsoleTest.Tests
         string[] inValidCommand = { "PLACE 1,2,EAST","","MOVE","LEFT","MOVE","REPORT" };
         string[] validInputCommand = { "PLACE 1,2,EAST", "MOVE", "MOVE", "LEFT", "MOVE", "REPORT" };
 
-
         #region Constructor
         [Fact]
         public void Given_CurrentClass_When_CallingConstructor_Then_NoExceptionIsThrown()
         {
             // Arrange
-            var autoMoq = new AutoMoqer();
-
+            IItem item = new Table();
+            IRobotMoves robotMoves = new RobotMovements();
+            IMovement movement = new MovementSimulator(item, robotMoves);
+            
             // Act
-            Action action = () => autoMoq.Create<Command>();
+            Action action = () => new Mock<Command>(movement, item);
 
             // Assert
             action.Should().NotThrow<Exception>();
@@ -29,17 +35,17 @@ namespace TryRobotConsoleTest.Tests
         public void Given_CurrentClass_When_CallingConstructor_Then_RobotMovementsIsSetToExpectedValue()
         {
             // Arrange
-            var autoMoq = new AutoMoqer();
+            IItem item = new Table();
+            IRobotMoves robotMoves = new RobotMovements();
+            IMovement movement = new MovementSimulator(item, robotMoves);
 
             // Act
-            var commands = autoMoq.Create<Command>();
+            var commands = new Mock<Command>(movement, item).Object;
 
             // Assert
             commands.Should().NotBeNull();
             commands.Placed.Equals(false);
             commands.Message.Should().BeEmpty();
-            commands.Table.Should().NotBeNull();
-            commands.Simulation.Should().BeNull();
             commands.ErrorInputs.Should().NotBeNullOrEmpty();
         }
         #endregion
@@ -48,8 +54,10 @@ namespace TryRobotConsoleTest.Tests
         public void Given_CurrentClass_When_CallingStartMethod_WithImProperCommands_Then_ExpectedValueReturns()
         {
             // Arrange
-            var autoMoq = new AutoMoqer();
-            var commands = autoMoq.Create<Command>();
+            IItem item = new Table();
+            IRobotMoves robotMoves = new RobotMovements();
+            IMovement movement = new MovementSimulator(item, robotMoves);
+            var commands = new Mock<Command>(movement, item).Object;
 
             // Act
             commands.Start(inValidCommand);
@@ -58,8 +66,6 @@ namespace TryRobotConsoleTest.Tests
             commands.Should().NotBeNull();
             commands.Placed.Equals(true);
             commands.Message.Should().NotBeNullOrEmpty();
-            commands.Table.Should().NotBeNull();
-            commands.Simulation.Should().NotBeNull();
             commands.ErrorInputs.Should().NotBeNullOrEmpty();
             commands.Message.Should().BeEquivalentTo(commands.ErrorInputs);
         }
@@ -68,8 +74,10 @@ namespace TryRobotConsoleTest.Tests
         public void Given_CurrentClass_When_CallingStartMethod_WithProperCommands_Then_ExpectedValueReturns()
         {
             // Arrange
-            var autoMoq = new AutoMoqer();
-            var commands = autoMoq.Create<Command>();
+            IItem item = new Table();
+            IRobotMoves robotMoves = new RobotMovements();
+            IMovement movement = new MovementSimulator(item, robotMoves);
+            var commands = new Mock<Command>(movement, item).Object;
 
             // Act
             commands.Start(validInputCommand);
@@ -78,8 +86,6 @@ namespace TryRobotConsoleTest.Tests
             commands.Should().NotBeNull();
             commands.Placed.Equals(true);
             commands.Message.Should().BeEmpty();
-            commands.Table.Should().NotBeNull();
-            commands.Simulation.Should().NotBeNull();
             commands.ErrorInputs.Should().NotBeNullOrEmpty();
             commands.Message.Should().NotBeSameAs(commands.ErrorInputs);
         }

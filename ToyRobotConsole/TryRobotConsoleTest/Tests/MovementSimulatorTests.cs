@@ -15,7 +15,7 @@ namespace TryRobotConsoleTest.Tests
         {
             // Arrange
             var autoMoq = new AutoMoqer();
-            var table = new Table(0,0);
+            var table = autoMoq.Create<Table>();
             autoMoq.SetInstance(table);
             // Act
             Action action = () => autoMoq.Create<MovementSimulator>();
@@ -29,7 +29,7 @@ namespace TryRobotConsoleTest.Tests
         {
             // Arrange
             var autoMoq = new AutoMoqer();
-            var table = new Table(0, 0);
+            var table = autoMoq.Create<Table>();
             autoMoq.SetInstance(table);
 
             // Act
@@ -37,8 +37,7 @@ namespace TryRobotConsoleTest.Tests
 
             // Assert
             movementSimulator.Should().NotBeNull();
-            movementSimulator.Robot.Should().BeNull();
-            movementSimulator.Surface.Should().NotBeNull();
+            movementSimulator.Robot.Should().NotBeNull();
         }
         #endregion
 
@@ -51,8 +50,11 @@ namespace TryRobotConsoleTest.Tests
         public void Given_CurrentClass_When_CallingPlaceMethod_WithValidDirectionAndPlaces_Then_RobotMovementsIsSetToExpectedValue(RobotMovementDirection movement, int east, int north)
         {
             // Arrange
-            Table tableTop = new Table(4, 4);
-            MovementSimulator instance = new MovementSimulator(tableTop);
+            Table tableTop = new Table();
+            tableTop.Width = 4;
+            tableTop.Length = 4;
+            RobotMovements robotMovements = new RobotMovements();
+            MovementSimulator instance = new MovementSimulator(tableTop, robotMovements);
             instance.Place(0, 0, RobotMovementDirection.North);
 
             // Act
@@ -78,8 +80,11 @@ namespace TryRobotConsoleTest.Tests
         public void Given_CurrentClass_When_CallingRobotMovesMethod_WithValidMoveDirectionAndPlaces_Then_RobotMovementsIsSetToExpectedValue(MoveDirection movement)
         {
             // Arrange
-            Table tableTop = new Table(4, 4);
-            MovementSimulator instance = new MovementSimulator(tableTop);
+            Table tableTop = new Table();
+            tableTop.Width = 4;
+            tableTop.Length = 4;
+            RobotMovements robotMovements = new RobotMovements();
+            MovementSimulator instance = new MovementSimulator(tableTop, robotMovements);
             instance.Place(0, 0, RobotMovementDirection.North);
 
             // Act
@@ -99,8 +104,11 @@ namespace TryRobotConsoleTest.Tests
         public void Given_CurrentClass_When_CallingReportMethod_WithValidMoveDirectionAndPlaces_Then_ReportsFinalData(RobotMovementDirection movement, int east, int north)
         {
             // Arrange
-            Table tableTop = new Table(4, 4);
-            MovementSimulator instance = new MovementSimulator(tableTop);
+            Table tableTop = new Table();
+            tableTop.Width = 4;
+            tableTop.Length = 4;
+            RobotMovements robotMovements = new RobotMovements();
+            MovementSimulator instance = new MovementSimulator(tableTop, robotMovements);
             instance.Place(east, north, movement);
 
             // Act

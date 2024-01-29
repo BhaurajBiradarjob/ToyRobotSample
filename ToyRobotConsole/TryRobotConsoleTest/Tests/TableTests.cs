@@ -29,7 +29,7 @@ namespace TryRobotConsoleTest.Tests
             var autoMoq = new AutoMoqer();
 
             // Act
-            var table = new Mock<Table>(It.IsAny<int>(),It.IsAny<int>()).Object;
+            var table = new Mock<Table>().Object;
 
             // Assert
             table.Should().NotBeNull();
@@ -49,7 +49,7 @@ namespace TryRobotConsoleTest.Tests
         {
             // Arrange
             var autoMoq = new AutoMoqer();
-            var table = new Mock<Table>(It.IsAny<int>(), It.IsAny<int>()).Object;
+            var table = new Mock<Table>().Object;
 
             // Act
             bool validLocation = table.IsValidLocation(east, north);
@@ -70,7 +70,7 @@ namespace TryRobotConsoleTest.Tests
         {
             // Arrange
             var autoMoq = new AutoMoqer();
-            var table = new Mock<Table>(It.IsAny<int>(), It.IsAny<int>()).Object;
+            var table = new Mock<Table>().Object;
 
             // Act
             bool validLocation = table.IsValidLocation(east, north);

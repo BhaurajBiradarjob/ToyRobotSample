@@ -10,11 +10,6 @@ namespace ToyRobotConsole.Implementation
         public int Width { get ; set ; }
         public int Length { get ; set ; }
 
-        public Table(int width, int length)
-        {
-            Width = width;
-            Length = length;
-        }
         /// <summary>
         /// Checking placed robot in valid surface
         /// </summary>
