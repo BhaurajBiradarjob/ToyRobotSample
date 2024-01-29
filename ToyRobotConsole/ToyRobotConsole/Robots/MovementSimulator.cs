@@ -1,27 +1,25 @@
-﻿using ToyRobotConsole.Implementation;
+﻿using ToyRobotConsole.Interfaces;
 
 namespace ToyRobotConsole.Robots
 {
-    public class MovementSimulator
+    public class MovementSimulator : IMovement
     {
-        public RobotMovements Robot;
-        public Table Surface;
+        public IRobotMoves Robot { get ; set ; }
+        private IItem Surface { get ; set ; }
 
-        public MovementSimulator(Table table)
+        public MovementSimulator(IItem table, IRobotMoves robotMoves)
         {
             Surface = table;
+            Robot = robotMoves;
         }
 
         public void Place(int east, int north, RobotMovementDirection direction)
         {
             if (Surface.IsValidLocation(east, north))
             {
-                Robot = new RobotMovements
-                {
-                    Direction = direction,
-                    East = east,
-                    North = north
-                };
+                Robot.Direction = direction;
+                Robot.East = east;
+                Robot.North = north;
             }
         }
 

@@ -1,16 +1,15 @@
 ﻿using System;
+using ToyRobotConsole.Interfaces;
 using ToyRobotConsole.Robots;
 
 namespace ToyRobotConsole
 {
-    public class RobotMovements
+    public class RobotMovements : IRobotMoves
     {
-        public int East = 0;
-        public int North = 0;
-        public RobotMovementDirection Direction;
-
-        public RobotMovements() { }
-        
+        public int East { get; set; } = 0;
+        public int North { get; set; } = 0;
+        public RobotMovementDirection Direction { get; set; }
+                
         public void Move()
         {
             switch (Direction)
