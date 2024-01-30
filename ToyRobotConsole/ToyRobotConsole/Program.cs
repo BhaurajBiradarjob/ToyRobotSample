@@ -12,43 +12,74 @@ namespace ToyRobotConsole
     public class Program
     {
         static IHost host;
+        static bool IsOutput = true;
         static void Main(string[] args)
         {
-            //if (args == null || args.Length == 0)
-            //{
-            //    Console.WriteLine("Please specify a .txt filepath.");
-            //    return;
-            //}
-            RegisterDependencies(args);
-            args = new string[]{ "D:\\11.txt"};
-            if (File.Exists(args[0]) && (Path.GetExtension(args[0]) == ".txt"))
+            try
             {
-                string[] commands = File.ReadAllLines(args[0]);
-                var command = host.Services.GetService<ICommand>();
-                Console.WriteLine(command.Start(commands));
+
+                do
+                {
+                    ProcessCommand(args);
+                } 
+                while (IsOutput);
+                
+            }
+            catch(Exception ex) 
+            {
+                ExceptionHandling.Instance.ThrowException(ex);
+            }
+            Console.ReadLine();
+        }
+
+        private static void ProcessCommand(string[] args)
+        {
+            Console.WriteLine("Please provide input file Path with .txt format");
+            string path = Console.ReadLine();
+            //args = new string[] { "D:\\Input\\11.txt" };
+            if (File.Exists(path) && (Path.GetExtension(path) == ".txt"))
+            {
+                string[] commands = File.ReadAllLines(path);
+                RegisterDependencies(args);
+
+                var validateInputs = host.Services.GetService<IValidateInputs>();
+                //if space, small letter, blank space exists then Reformat the string
+                string[] reformattedcommand = validateInputs.FormatInput(commands);
+                if (reformattedcommand != null && reformattedcommand.Length == 0)
+                {
+                    Console.WriteLine("Please add correct input in the file");
+                    Console.WriteLine("#####################################");
+                    return;
+                }
+
+                // Validate the input
+                bool IsValidInput = validateInputs.ValidateInput(reformattedcommand);
+                if (IsValidInput)
+                {
+                    var command = host.Services.GetService<ICommand>();
+                    Console.WriteLine(command.Start(reformattedcommand));
+                    IsOutput = false;
+                }
+                else
+                {
+                    Console.WriteLine("Please add correct input in the file and then Please try again");
+                }
             }
             else
             {
                 Console.WriteLine("Input file is not a .txt file or Please add correct input format in .txt file and then Please try again");
             }
-            Console.ReadLine();
         }
 
         static void RegisterDependencies(string[] args)
         {
-            try
-            {
-                HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
-                builder.Services.AddSingleton<IItem, Table>();
-                builder.Services.AddSingleton<IMovement, MovementSimulator>();
-                builder.Services.AddSingleton<IRobotMoves, RobotMovements>();
-                builder.Services.AddSingleton<ICommand, Command>();
-                host = builder.Build();
-            }
-            catch (Exception ex)
-            {
-                ExceptionHandling.Instance.ThrowException(ex);
-            }
+            HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
+            builder.Services.AddSingleton<IItem, Table>();
+            builder.Services.AddSingleton<IValidateInputs, ValidateInputs>();
+            builder.Services.AddSingleton<IMovement, MovementSimulator>();
+            builder.Services.AddSingleton<IRobotMoves, RobotMovements>();
+            builder.Services.AddSingleton<ICommand, Command>();
+            host = builder.Build();
         }
     }
 }

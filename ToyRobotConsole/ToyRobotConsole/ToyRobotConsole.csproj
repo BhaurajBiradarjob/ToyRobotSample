@@ -179,10 +179,12 @@
     <Compile Include="Helper\ExceptionHandling.cs" />
     <Compile Include="Implementation\Command.cs" />
     <Compile Include="Implementation\Table.cs" />
+    <Compile Include="Implementation\ValidateInputs.cs" />
     <Compile Include="Interfaces\ICommand.cs" />
     <Compile Include="Interfaces\IItem.cs" />
     <Compile Include="Interfaces\IMovement.cs" />
     <Compile Include="Interfaces\IRobotMoves.cs" />
+    <Compile Include="Interfaces\IValidateInputs.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Robots\MovementSimulator.cs" />
