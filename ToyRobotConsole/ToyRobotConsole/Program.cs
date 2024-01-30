@@ -14,13 +14,13 @@ namespace ToyRobotConsole
         static IHost host;
         static void Main(string[] args)
         {
-            if (args == null || args.Length == 0)
-            {
-                Console.WriteLine("Please specify a .txt filepath.");
-                return;
-            }
+            //if (args == null || args.Length == 0)
+            //{
+            //    Console.WriteLine("Please specify a .txt filepath.");
+            //    return;
+            //}
             RegisterDependencies(args);
-            //args = new string[]{ "D:\\11.txt"};
+            args = new string[]{ "D:\\11.txt"};
             if (File.Exists(args[0]) && (Path.GetExtension(args[0]) == ".txt"))
             {
                 string[] commands = File.ReadAllLines(args[0]);

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TryRobotConsoleTest")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+abd86937edeaccb58f39fe16858250a60e29ccf9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a8acafc3f64bc1756cfa59de130afbf8eea30ce2")]
 [assembly: System.Reflection.AssemblyProductAttribute("TryRobotConsoleTest")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TryRobotConsoleTest")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

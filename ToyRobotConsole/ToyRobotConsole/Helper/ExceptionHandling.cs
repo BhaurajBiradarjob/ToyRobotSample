@@ -4,8 +4,19 @@ namespace ToyRobotConsole.Helper
 {
     public class ExceptionHandling : Exception
     {
-        public static ExceptionHandling Instance = new ExceptionHandling();
-        public ExceptionHandling()
+        private static ExceptionHandling instance = null;
+        public static ExceptionHandling Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new ExceptionHandling();
+                }
+                return instance;
+            }
+        }
+        private ExceptionHandling()
         {
         }
 
